@@ -13,29 +13,28 @@
             width: 100%;
             overflow: hidden;
             font-family: 'Montserrat', sans-serif;
-            background-color: #1a1a1a;
         }
 
-        /* Fondo Animado con Degradado (Sin necesidad de imagen externa) */
+        /* El fondo degradado que elegiste */
         .background-image {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #1a1a1a, #2d1b2d, #1a1a1a);
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
             background-size: 400% 400%;
             z-index: -1;
-            animation: moveGradient 15s ease infinite;
+            animation: gradientAnimation 10s ease infinite;
         }
 
-        @keyframes moveGradient {
+        @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Contenedor Principal */
+        /* Contenedor de los textos */
         .main-container {
             position: absolute;
             top: 50%;
@@ -46,21 +45,21 @@
             flex-direction: column;
             align-items: center;
             width: 90%;
-            gap: 20px;
+            gap: 15px;
         }
 
-        /* El nombre principal */
+        /* Nombre con efecto de brillo */
         .name-box {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             padding: 20px 50px;
             border-radius: 25px;
             font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 900;
-            letter-spacing: 12px;
+            letter-spacing: 10px;
             text-align: center;
             background-image: linear-gradient(135deg, #ffffff, #ffb3d9, #ffffff, #ffe066, #ffffff);
             background-size: 200% auto;
@@ -69,18 +68,14 @@
             animation: shineText 5s linear infinite;
         }
 
-        /* Frases secundarias más pequeñas */
+        /* Frases pequeñas debajo del nombre */
         .sub-text {
-            font-size: clamp(1rem, 4vw, 1.8rem);
+            font-size: clamp(1.2rem, 4vw, 2rem);
             font-weight: 700;
             text-align: center;
             min-height: 2.5rem;
-            letter-spacing: 3px;
-            background-image: linear-gradient(135deg, #ffffff, #ffb3d9, #ffffff);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shineText 5s linear infinite;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
             opacity: 0;
             transition: opacity 1s ease-in-out;
         }
@@ -89,40 +84,26 @@
             to { background-position: 200% center; }
         }
 
-        /* Contenedor del Botón */
+        /* Botón de Corazón */
         .heart-container {
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .tooltip-msg {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 12px;
-            border-radius: 10px;
-            font-size: 12px;
-            color: white;
-            margin-bottom: 10px;
-            animation: floatMsg 2s ease-in-out infinite;
-        }
-
-        @keyframes floatMsg {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            margin-top: 20px;
         }
 
         #btnMusica {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(10px);
             color: #ff4d94;
-            font-size: 35px;
+            font-size: 40px;
             cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             animation: heartbeat 1.5s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         @keyframes heartbeat {
@@ -130,7 +111,7 @@
             15%, 45% { transform: scale(1.15); }
         }
 
-        /* Emojis y Chispas */
+        /* Lluvia de emojis */
         .falling-emoji { position: absolute; top: -50px; z-index: 5; animation: fall linear infinite; }
         @keyframes fall {
             0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
@@ -146,10 +127,9 @@
 
     <div class="main-container">
         <div class="name-box">NAOMY</div>
-        <div class="sub-text" id="dynamicText">Eres mi persona favorita</div>
+        <div class="sub-text" id="dynamicText">Eres mi persona favorita ✨</div>
         
         <div class="heart-container">
-            <div class="tooltip-msg" id="msg">Presiona el corazón</div>
             <button id="btnMusica" onclick="toggleMusica()">❤️</button>
         </div>
     </div>
@@ -159,13 +139,13 @@
     </audio>
 
     <script>
-        // Lista de frases que irán cambiando
         const frases = [
             "Eres mi persona favorita ✨",
             "La más bonita de todas 🌹",
             "Haces mi mundo mejor ❤️",
             "Siempre juntos 🌸",
-            "Te quiero muchísimo 🐝"
+            "Te quiero muchísimo 🐝",
+            "Eres mi lugar seguro 🌈"
         ];
 
         let index = 0;
@@ -179,34 +159,30 @@
                 textElement.style.opacity = "1";
             }, 1000);
         }
-        setInterval(changeText, 4000); // Cambia cada 4 segundos
+        setInterval(changeText, 4000); 
 
-        // Lluvia de emojis
-        const emojis = ['❤️', '🦫', '🌸', '✨', '🌹'];
+        const emojis = ['❤️', '✨', '🌸', '🌹', '💖', '🌷'];
         function createEmoji() {
             const e = document.createElement('div');
             e.classList.add('falling-emoji');
             e.innerText = emojis[Math.floor(Math.random() * emojis.length)];
             e.style.left = Math.random() * 100 + 'vw';
             e.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
-            e.style.animationDuration = (Math.random() * 6 + 5) + 's';
+            e.style.animationDuration = (Math.random() * 5 + 4) + 's';
             document.getElementById('rainContainer').appendChild(e);
-            setTimeout(() => e.remove(), 11000);
+            setTimeout(() => e.remove(), 9000);
         }
-        setInterval(createEmoji, 400);
+        setInterval(createEmoji, 500);
 
         function toggleMusica() {
             const audio = document.getElementById('miMusica');
             const btn = document.getElementById('btnMusica');
-            const msg = document.getElementById('msg');
             if (audio.paused) {
                 audio.play();
-                btn.style.animationDuration = "0.8s";
-                msg.style.opacity = "0";
+                btn.style.animationDuration = "0.7s";
             } else {
                 audio.pause();
                 btn.style.animationDuration = "1.5s";
-                msg.style.opacity = "1";
             }
         }
     </script>
