@@ -10,43 +10,46 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            width: 100%;
             overflow: hidden;
             font-family: 'Montserrat', sans-serif;
             background-color: #1a1a1a;
         }
 
-        /* Fondo Animado */
+        /* Fondo Animado con Degradado (Sin necesidad de imagen externa) */
         .background-image {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('fondo..jfif'); 
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(45deg, #1a1a1a, #2d1b2d, #1a1a1a);
+            background-size: 400% 400%;
             z-index: -1;
-            animation: moveBackground 30s ease-in-out infinite;
+            animation: moveGradient 15s ease infinite;
         }
 
-        @keyframes moveBackground {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
+        @keyframes moveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* Contenedor Principal */
-        .overlay-center {
+        .main-container {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 10;
             display: flex;
+            flex-direction: column;
             align-items: center;
+            width: 90%;
             gap: 20px;
         }
 
+        /* El nombre principal */
         .name-box {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(12px);
@@ -66,32 +69,42 @@
             animation: shineText 5s linear infinite;
         }
 
+        /* Frases secundarias más pequeñas */
+        .sub-text {
+            font-size: clamp(1rem, 4vw, 1.8rem);
+            font-weight: 700;
+            text-align: center;
+            min-height: 2.5rem;
+            letter-spacing: 3px;
+            background-image: linear-gradient(135deg, #ffffff, #ffb3d9, #ffffff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shineText 5s linear infinite;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
         @keyframes shineText {
             to { background-position: 200% center; }
         }
 
-        /* Contenedor del Botón y el Mensaje */
+        /* Contenedor del Botón */
         .heart-container {
-            position: relative;
+            margin-top: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Mensaje Pequeño */
         .tooltip-msg {
-            position: absolute;
-            top: -45px;
             background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
             padding: 5px 12px;
             border-radius: 10px;
             font-size: 12px;
             color: white;
-            white-space: nowrap;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 10px;
             animation: floatMsg 2s ease-in-out infinite;
-            transition: opacity 0.5s ease;
         }
 
         @keyframes floatMsg {
@@ -99,53 +112,30 @@
             50% { transform: translateY(-5px); }
         }
 
-        /* Botón de Corazón */
         #btnMusica {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
             color: #ff4d94;
-            font-size: 40px;
+            font-size: 35px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             animation: heartbeat 1.5s ease-in-out infinite;
         }
 
-        #btnMusica.playing {
-            color: #ff0000;
-            background: rgba(255, 255, 255, 0.3);
-            animation: heartbeat 0.8s ease-in-out infinite;
-        }
-
         @keyframes heartbeat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.15); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.15); }
-            70% { transform: scale(1); }
+            0%, 70%, 100% { transform: scale(1); }
+            15%, 45% { transform: scale(1.15); }
         }
 
-        /* Chispas y Emojis */
+        /* Emojis y Chispas */
         .falling-emoji { position: absolute; top: -50px; z-index: 5; animation: fall linear infinite; }
-        .mouse-spark { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: sparkFade 1s ease-out forwards; }
-        
         @keyframes fall {
             0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-        }
-        @keyframes sparkFade {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
         }
     </style>
 </head>
@@ -153,10 +143,11 @@
 
     <div class="background-image"></div>
     <div id="rainContainer"></div>
-    <div id="sparkleContainer"></div>
 
-    <div class="overlay-center">
+    <div class="main-container">
         <div class="name-box">NAOMY</div>
+        <div class="sub-text" id="dynamicText">Eres mi persona favorita</div>
+        
         <div class="heart-container">
             <div class="tooltip-msg" id="msg">Presiona el corazón</div>
             <button id="btnMusica" onclick="toggleMusica()">❤️</button>
@@ -168,9 +159,30 @@
     </audio>
 
     <script>
-        const emojis = ['❤️', '🦫', '🌸', '✨', '🌹'];
-        const container = document.getElementById('rainContainer');
+        // Lista de frases que irán cambiando
+        const frases = [
+            "Eres mi persona favorita ✨",
+            "La más bonita de todas 🌹",
+            "Haces mi mundo mejor ❤️",
+            "Siempre juntos 🌸",
+            "Te quiero muchísimo 🐝"
+        ];
 
+        let index = 0;
+        const textElement = document.getElementById('dynamicText');
+
+        function changeText() {
+            textElement.style.opacity = "0";
+            setTimeout(() => {
+                index = (index + 1) % frases.length;
+                textElement.innerText = frases[index];
+                textElement.style.opacity = "1";
+            }, 1000);
+        }
+        setInterval(changeText, 4000); // Cambia cada 4 segundos
+
+        // Lluvia de emojis
+        const emojis = ['❤️', '🦫', '🌸', '✨', '🌹'];
         function createEmoji() {
             const e = document.createElement('div');
             e.classList.add('falling-emoji');
@@ -178,38 +190,23 @@
             e.style.left = Math.random() * 100 + 'vw';
             e.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
             e.style.animationDuration = (Math.random() * 6 + 5) + 's';
-            container.appendChild(e);
+            document.getElementById('rainContainer').appendChild(e);
             setTimeout(() => e.remove(), 11000);
         }
         setInterval(createEmoji, 400);
 
-        // Efecto Mouse
-        window.addEventListener('mousemove', (e) => {
-            if(Math.random() > 0.8) {
-                const spark = document.createElement('div');
-                spark.classList.add('mouse-spark');
-                spark.style.left = e.clientX + 'px';
-                spark.style.top = e.clientY + 'px';
-                spark.style.backgroundColor = ['#fff', '#ffd700', '#ffb3d9'][Math.floor(Math.random()*3)];
-                document.getElementById('sparkleContainer').appendChild(spark);
-                setTimeout(() => spark.remove(), 1000);
-            }
-        });
-
-        // Control de música
         function toggleMusica() {
             const audio = document.getElementById('miMusica');
             const btn = document.getElementById('btnMusica');
             const msg = document.getElementById('msg');
-            
             if (audio.paused) {
                 audio.play();
-                btn.classList.add('playing');
-                msg.style.opacity = "0"; // Oculta el mensaje al activar
+                btn.style.animationDuration = "0.8s";
+                msg.style.opacity = "0";
             } else {
                 audio.pause();
-                btn.classList.remove('playing');
-                msg.style.opacity = "1"; // Lo muestra si se pausa
+                btn.style.animationDuration = "1.5s";
+                msg.style.opacity = "1";
             }
         }
     </script>
