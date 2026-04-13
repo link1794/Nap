@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Naomy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
     <style>
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             overflow: hidden;
-            font-family: 'Arial', sans-serif;
+            /* 1. MEJORA: Aplicar la nueva tipografía por defecto */
+            font-family: 'Montserrat', sans-serif;
+            /* Fondo oscuro por defecto por si la imagen tarda en cargar */
+            background-color: #1a1a1a;
         }
 
         /* Fondo Animado */
@@ -20,17 +24,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* Puedes cambiar esta URL por 'fondo.jpg' si tienes la imagen local */
             background-image: url('descarga (1).jfif'); 
             background-size: cover;
             background-position: center;
             z-index: -1;
-            animation: moveBackground 25s linear infinite;
+            /* Suavizar la animación del fondo */
+            animation: moveBackground 30s ease-in-out infinite;
         }
 
         @keyframes moveBackground {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.08); }
             100% { transform: scale(1); }
         }
 
@@ -44,16 +48,31 @@
         }
 
         .name-box {
-            background-color: rgba(0, 0, 0, 0.75);
-            color: white;
-            padding: 20px 50px;
-            border-radius: 15px;
-            font-size: clamp(2rem, 8vw, 5rem);
-            font-weight: bold;
-            letter-spacing: 10px;
+            /* 2. MEJORA: Efecto Vidrio Esmerilado (Glassmorphism) */
+            background: rgba(255, 255, 255, 0.08); /* Fondo muy claro y sutil */
+            backdrop-filter: blur(12px); /* El desenfoque clave */
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Borde fino y claro */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            
+            padding: 30px 60px; /* Aumentar padding para que el vidrio luzca más */
+            border-radius: 25px; /* Bordes más redondeados */
+            font-size: clamp(2.5rem, 10vw, 6rem); /* Ligeramente más grande */
+            font-weight: 900; /* Peso extra-negrita */
+            letter-spacing: 12px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.2);
+            
+            /* 3. MEJORA: Gradiente de Texto Animado */
+            background-image: linear-gradient(135deg, #ffffff, #ffb3d9, #ffffff, #ffe066, #ffffff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shineText 5s linear infinite;
+        }
+
+        /* Animación para el brillo del texto */
+        @keyframes shineText {
+            to { background-position: 200% center; }
         }
 
         /* Lluvia de Emojis */
@@ -64,13 +83,34 @@
             user-select: none;
             pointer-events: none;
             animation: fall linear infinite;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); /* Pequeño brillo a los emojis */
         }
 
+        /* 4. MEJORA: Animación de caída con bamboleo (movimiento X) */
         @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            0% { transform: translateY(-50px) translateX(0) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
+            25% { transform: translateY(25vh) translateX(15px) rotate(90deg); }
+            50% { transform: translateY(50vh) translateX(-15px) rotate(180deg); }
+            75% { transform: translateY(75vh) translateX(10px) rotate(270deg); }
             90% { opacity: 1; }
-            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+            100% { transform: translateY(110vh) translateX(0) rotate(360deg); opacity: 0; }
+        }
+
+        /* 5. NUEVO: Estilo para las chispas del mouse */
+        .mouse-spark {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none; /* No interfiere con clics */
+            z-index: 200; /* Por encima de todo */
+            animation: sparkFade 1s ease-out forwards;
+        }
+
+        @keyframes sparkFade {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
         }
 
         /* Botón de Música */
@@ -83,17 +123,22 @@
             height: 60px;
             border-radius: 50%;
             border: none;
-            background: rgba(0, 0, 0, 0.6);
+            /* Usar el efecto de vidrio también en el botón */
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
             color: white;
             font-size: 24px;
             cursor: pointer;
-            backdrop-filter: blur(5px);
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         #btnMusica:hover {
             transform: scale(1.1);
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -101,6 +146,7 @@
 
     <div class="background-image"></div>
     <div id="rainContainer"></div>
+    <div id="sparkleContainer"></div>
 
     <div class="overlay-center">
         <div class="name-box">NAOMY</div>
@@ -122,18 +168,73 @@
             e.classList.add('falling-emoji');
             e.innerText = emojis[Math.floor(Math.random() * emojis.length)];
             e.style.left = Math.random() * 100 + 'vw';
-            e.style.fontSize = (Math.random() * 2 + 1) + 'rem';
-            e.style.animationDuration = (Math.random() * 7 + 4) + 's';
-            e.style.opacity = Math.random();
+            
+            // Variar más el tamaño para dar profundidad
+            const size = (Math.random() * 1.5 + 1) + 'rem';
+            e.style.fontSize = size;
+            
+            // Variar la velocidad
+            e.style.animationDuration = (Math.random() * 6 + 5) + 's';
+            
+            // Opacidad inicial aleatoria
+            e.style.opacity = Math.random() * 0.5 + 0.5;
             
             container.appendChild(e);
 
+            // Eliminar después de que termine la animación
             setTimeout(() => {
                 e.remove();
-            }, 10000);
+            }, 11000);
         }
 
-        setInterval(createEmoji, 300);
+        // Intervalo ligeramente más lento para no saturar con el nuevo efecto
+        setInterval(createEmoji, 400);
+
+
+        // 5. NUEVO: Efecto Mouse (Estrellitas/Chispas que siguen el puntero)
+        const sparkleContainer = document.getElementById('sparkleContainer');
+        // Colores para las chispas (tonos que combinen)
+        const sparkColors = ['#fff', '#ffd700', '#ffb3d9'];
+
+        function createSparkle(x, y) {
+            const spark = document.createElement('div');
+            spark.classList.add('mouse-spark');
+            
+            // Posición exacta del mouse
+            spark.style.left = x + 'px';
+            spark.style.top = y + 'px';
+            
+            // Color aleatorio
+            spark.style.backgroundColor = sparkColors[Math.floor(Math.random() * sparkColors.length)];
+            
+            // Brillo opcional
+            if(Math.random() > 0.5) {
+                spark.style.boxShadow = `0 0 5px ${spark.style.backgroundColor}`;
+            }
+
+            sparkleContainer.appendChild(spark);
+
+            // Eliminar rápido para no saturar el DOM
+            setTimeout(() => {
+                spark.remove();
+            }, 1000);
+        }
+
+        // Escuchar el movimiento del mouse
+        window.addEventListener('mousemove', (e) => {
+            // Solo crear chispas de vez en cuando (no en cada pixel de movimiento)
+            // para mejorar rendimiento
+            if(Math.random() > 0.8) { 
+                createSparkle(e.clientX, e.clientY);
+            }
+        });
+
+        // Soporte para pantallas táctiles (para que funcione en móvil)
+        window.addEventListener('touchmove', (e) => {
+            // e.touches[0] es el primer dedo
+            createSparkle(e.touches[0].clientX, e.touches[0].clientY);
+        });
+
 
         // Control de música
         function toggleMusica() {
